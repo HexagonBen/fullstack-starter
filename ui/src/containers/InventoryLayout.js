@@ -14,6 +14,7 @@ import TableRow from '@material-ui/core/TableRow'
 import { EnhancedTableHead, EnhancedTableToolbar, getComparator, stableSort } from '../components/Table'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import InventoryFormModal from '../components/Inventories/InventoryFormModal'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -140,9 +141,25 @@ const InventoryLayout = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <InventoryFormModal
+            title='Create'
+            formName='inventoryCreate'
+            isDialogOpen={isCreateOpen}
+            handleDialog={toggleModals}
+            handleInventory={saveInventory}
+            initialValues={{
+              name: "",
+              description: "",
+              averagePrice: 0,
+              amount: 0,
+              bestBeforeDate: moment(new Date()).format("YYYY-MM-DD"),
+              neverExpires: false
+            }}
+        />
       </Grid>
     </Grid>
   )
 }
 
 export default InventoryLayout
+
