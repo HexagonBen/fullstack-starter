@@ -51,7 +51,7 @@ const InventoryLayout = (props) => {
   const inventory = useSelector(state => state.inventory.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   // const removeInventories = useCallback(ids => { dispatch(inventoryDuck.removeInventories(ids)) }, [dispatch])
-  const saveInventory = useCallback(inventory => { dispatch(productDuck.saveInventory(inventory)) }, [dispatch])
+  const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
 
   useEffect(() => {
     if (!isFetched) {
@@ -128,8 +128,8 @@ const InventoryLayout = (props) => {
             numSelected={selected.length}
             title='Inventory'
             toggleCreate={toggleCreate}
-            {/*toggleDelete={toggleDelete}*/}
-            {/*toggleEdit={toggleEdit}*/}
+            // toggleDelete={toggleDelete}
+            // toggleEdit={toggleEdit}
         />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>

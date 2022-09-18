@@ -36,14 +36,12 @@ class InventoryFormModal extends React.Component {
             if (values.amount < 0) {
                  errors.amount = "Amount cannot be negative."
             }
-            if (!unitOfMeasurement) {
+            if (!values.unitOfMeasurement) {
                 errors.unitOfMeasurement = "A unit of measurement must be selected."
             }
 
             return errors;
         }
-
-        const products = useSelector(state => state.products.all)
 
         return (
             <Dialog
@@ -88,7 +86,7 @@ class InventoryFormModal extends React.Component {
                                             label='Product Type'
                                             required
                                             component={TextField} select
-                                            {products.map(product => {
+                                            {useSelector(state => state.products.all).map(product => {
                                                 return(<MenuItem value={product.name} key={product.id}>{product.name}</MenuItem>)
                                             })}
                                         </Field>
