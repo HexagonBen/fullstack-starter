@@ -21,6 +21,28 @@ class InventoryFormModal extends React.Component {
             initialValues
         } = this.props
 
+        const validate = values => {
+            const errors = {};
+
+            if (!values.name) {
+                errors.name = "An inventory name is required."
+            }
+            if (!values.productType) {
+                errors.productType = "A product type must be selected."
+            }
+            if (values.averagePrice < 0) {
+                errors.averagePrice = "Average price cannot be negative."
+            }
+            if (values.amount < 0) {
+                 errors.amount = "Amount cannot be negative."
+            }
+            if (!unitOfMeasurement) {
+                errors.unitOfMeasurement = "A unit of measurement must be selected."
+            }
+
+            return errors;
+        }
+
         const products = useSelector(state => state.products.all)
 
         return (
@@ -36,30 +58,8 @@ class InventoryFormModal extends React.Component {
                         handleInventory(values)
                         handleDialog(true)
                     }}
-                    // Begin validation
-                    const validate = values => {
-                        const errors = {};
-
-                        if (!values.name) {
-                            errors.name = "An inventory name is required."
-                        }
-                        if (!values.productType) {
-                            errors.productType = "A product type must be selected."
-                        }
-                        if (values.averagePrice < 0) {
-                            errors.averagePrice = "Average price cannot be negative."
-                        }
-                        if (values.amount < 0) {
-                            errors.amount = "Amount cannot be negative."
-                        }
-                        if (!unitOfMeasurement) {
-                            errors.unitOfMeasurement = "A unit of measurement must be selected."
-                        }
-
-                        return errors;
-                    };
-                    // End validation
-                >
+                    validate = {validate}
+			    >
                     {helpers =>
                         <Form
                             autoComplete='off'

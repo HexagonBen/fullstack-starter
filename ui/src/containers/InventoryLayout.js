@@ -12,7 +12,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableRow from '@material-ui/core/TableRow'
 import { EnhancedTableHead, EnhancedTableToolbar, getComparator, stableSort } from '../components/Table'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import InventoryFormModal from '../components/Inventories/InventoryFormModal'
 
@@ -47,14 +47,39 @@ const headCells = [
 const InventoryLayout = (props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+
   const inventory = useSelector(state => state.inventory.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
+  // const removeInventories = useCallback(ids => { dispatch(inventoryDuck.removeInventories(ids)) }, [dispatch])
+  const saveInventory = useCallback(inventory => { dispatch(productDuck.saveInventory(inventory)) }, [dispatch])
+
   useEffect(() => {
     if (!isFetched) {
       dispatch(inventoryDuck.findInventory())
       dispatch(productDuck.findProducts())
     }
   }, [dispatch, isFetched])
+
+  const [isCreateOpen, setCreateOpen] = React.useState(false)
+  // const [isEditOpen, setEditOpen] = React.useState(false)
+  // const [isDeleteOpen, setDeleteOpen] = React.useState(false)
+  const toggleCreate = () => {
+    setCreateOpen(true)
+  }
+  // const toggleEdit = () => {
+  //   setEditOpen(true)
+  // }
+  // const toggleDelete = () => {
+  //   setDeleteOpen(true)
+  // }
+  const toggleModals = (resetSelected) => {
+    setCreateOpen(false)
+    // setDeleteOpen(false)
+    // setEditOpen(false)
+    if (resetSelected) {
+      setSelected([])
+    }
+  }
 
   const normalizedInventory = normalizeInventory(inventory)
   const [order, setOrder] = React.useState('asc')
@@ -99,7 +124,13 @@ const InventoryLayout = (props) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <EnhancedTableToolbar numSelected={selected.length} title='Inventory'/>
+        <EnhancedTableToolbar
+            numSelected={selected.length}
+            title='Inventory'
+            toggleCreate={toggleCreate}
+            {/*toggleDelete={toggleDelete}*/}
+            {/*toggleEdit={toggleEdit}*/}
+        />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
             <EnhancedTableHead
