@@ -180,9 +180,11 @@ const InventoryLayout = (props) => {
             handleInventory={saveInventory}
             initialValues={{
               name: "",
+			  productType: "",
               description: "",
               averagePrice: 0,
               amount: 0,
+			  unitOfMeasurement: "",
               bestBeforeDate: moment(new Date()).format("YYYY-MM-DD"),
               neverExpires: false
             }}

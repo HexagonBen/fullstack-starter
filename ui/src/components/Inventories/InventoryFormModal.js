@@ -53,6 +53,7 @@ class InventoryFormModal extends React.Component {
                 <Formik
                     initialValues={initialValues}
                     onSubmit={values => {
+						console.log(values)
                         handleInventory(values)
                         handleDialog(true)
                     }}
@@ -67,7 +68,7 @@ class InventoryFormModal extends React.Component {
                                 {`${title} Inventory`}
                             </DialogTitle>
                             <DialogContent>
-                                <Grid container>
+                                <Grid container spacing={2}>
                                     {/*Name*/}
                                     <Grid item xs={12} sm={12}>
                                         <Field
@@ -80,12 +81,13 @@ class InventoryFormModal extends React.Component {
                                     </Grid>
                                     {/*Product Type*/}
                                     <Grid item xs={12} sm={12}>
-                                        <Field>
+                                        <Field
                                             custom={{ variant: 'outlined', fullWidth: true, }}
                                             name='productType'
                                             label='Product Type'
                                             required
                                             component={TextField} select
+										>
                                             {useSelector(state => state.products.all).map(product => {
                                                 return(<MenuItem value={product.name} key={product.id}>{product.name}</MenuItem>)
                                             })}
@@ -123,12 +125,14 @@ class InventoryFormModal extends React.Component {
                                     </Grid>
                                     {/*Unit of Measurement*/}
                                     <Grid item xs={12} sm={12}>
-                                        <Field>
+                                        <Field
                                             custom={{ variant: 'outlined', fullWidth: true, }}
                                             name='unitOfMeasurement'
                                             label='Unit of Measurement'
                                             required
                                             component={TextField} select
+						                    defaultValue=''
+										>
                                             {Object.keys(MeasurementUnits).map(unit => {
                                                 return(<MenuItem value={unit} key={MeasurementUnits[unit].name}>{unit}</MenuItem>)
                                             })}
@@ -148,6 +152,8 @@ class InventoryFormModal extends React.Component {
                                     <Grid item xs={12} sm={12}>
                                         <Field
                                             custom={{ variant: 'outlined', fullWidth: true, }}
+						                    as={FormControlLabel}
+						                    control={<Checkbox />}
                                             name='neverExpires'
                                             label='Never Expires'
                                             type="checkbox"
