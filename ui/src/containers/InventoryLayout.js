@@ -49,6 +49,7 @@ const InventoryLayout = (props) => {
   const dispatch = useDispatch()
 
   const inventory = useSelector(state => state.inventory.all)
+  const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   // const removeInventories = useCallback(ids => { dispatch(inventoryDuck.removeInventories(ids)) }, [dispatch])
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
@@ -175,16 +176,18 @@ const InventoryLayout = (props) => {
         <InventoryFormModal
             title='Create'
             formName='inventoryCreate'
+	    products={products}
+	    unitsOfMeasurement={MeasurementUnits}
             isDialogOpen={isCreateOpen}
             handleDialog={toggleModals}
             handleInventory={saveInventory}
             initialValues={{
               name: "",
-			  productType: "",
+              productType: "",
               description: "",
               averagePrice: 0,
               amount: 0,
-			  unitOfMeasurement: "",
+              unitOfMeasurement: "",
               bestBeforeDate: moment(new Date()).format("YYYY-MM-DD"),
               neverExpires: false
             }}
