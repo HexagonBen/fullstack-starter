@@ -42,7 +42,7 @@ const renderApplication = (overrideConfig) => {
 
   const store = createStore(reducers, { config: config }, applyMiddleware(...middleware))
 
-  store.subscribe(()=>{console.log(store.getState())})
+  // store.subscribe(()=>{console.log(store.getState())})
 
   ReactDom.render(
     <Provider store={store}>
