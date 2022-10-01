@@ -51,7 +51,6 @@ const InventoryLayout = (props) => {
   const inventory = useSelector(state => state.inventory.all)
   const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
-  // const removeInventories = useCallback(ids => { dispatch(inventoryDuck.removeInventories(ids)) }, [dispatch])
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
 
   useEffect(() => {
@@ -62,21 +61,11 @@ const InventoryLayout = (props) => {
   }, [dispatch, isFetched])
 
   const [isCreateOpen, setCreateOpen] = React.useState(false)
-  // const [isEditOpen, setEditOpen] = React.useState(false)
-  // const [isDeleteOpen, setDeleteOpen] = React.useState(false)
   const toggleCreate = () => {
     setCreateOpen(true)
   }
-  // const toggleEdit = () => {
-  //   setEditOpen(true)
-  // }
-  // const toggleDelete = () => {
-  //   setDeleteOpen(true)
-  // }
   const toggleModals = (resetSelected) => {
     setCreateOpen(false)
-    // setDeleteOpen(false)
-    // setEditOpen(false)
     if (resetSelected) {
       setSelected([])
     }
@@ -129,8 +118,6 @@ const InventoryLayout = (props) => {
             numSelected={selected.length}
             title='Inventory'
             toggleCreate={toggleCreate}
-            // toggleDelete={toggleDelete}
-            // toggleEdit={toggleEdit}
         />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>

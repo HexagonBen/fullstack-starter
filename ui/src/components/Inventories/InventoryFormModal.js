@@ -54,10 +54,8 @@ class InventoryFormModal extends React.Component {
                 <Formik
                     initialValues={initialValues}
                     onSubmit={values => {
-			// console.log("VALUES OBJECT: " + JSON.stringify(values))
 			values.bestBeforeDate = values.bestBeforeDate + "T00:00:00Z"
-			// console.log("POST FORMATTING: " + JSON.stringify(values))
-                        handleInventory(values)
+			handleInventory(values)
                         handleDialog(true)
                     }}
                     validate = {validate}
