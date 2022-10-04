@@ -12,8 +12,9 @@ import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableRow from '@material-ui/core/TableRow'
 import { EnhancedTableHead, EnhancedTableToolbar, getComparator, stableSort } from '../components/Table'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import InventoryFormModal from '../components/Inventories/InventoryFormModal'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,14 +47,29 @@ const headCells = [
 const InventoryLayout = (props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+
   const inventory = useSelector(state => state.inventory.all)
+  const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
+  const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
+
   useEffect(() => {
     if (!isFetched) {
       dispatch(inventoryDuck.findInventory())
       dispatch(productDuck.findProducts())
     }
   }, [dispatch, isFetched])
+
+  const [isCreateOpen, setCreateOpen] = React.useState(false)
+  const toggleCreate = () => {
+    setCreateOpen(true)
+  }
+  const toggleModals = (resetSelected) => {
+    setCreateOpen(false)
+    if (resetSelected) {
+      setSelected([])
+    }
+  }
 
   const normalizedInventory = normalizeInventory(inventory)
   const [order, setOrder] = React.useState('asc')
@@ -98,7 +114,11 @@ const InventoryLayout = (props) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <EnhancedTableToolbar numSelected={selected.length} title='Inventory'/>
+        <EnhancedTableToolbar
+            numSelected={selected.length}
+            title='Inventory'
+            toggleCreate={toggleCreate}
+        />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
             <EnhancedTableHead
@@ -140,9 +160,29 @@ const InventoryLayout = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <InventoryFormModal
+            title='Create'
+            formName='inventoryCreate'
+	    products={products}
+	    unitsOfMeasurement={MeasurementUnits}
+            isDialogOpen={isCreateOpen}
+            handleDialog={toggleModals}
+            handleInventory={saveInventory}
+            initialValues={{
+              name: "",
+              productType: "",
+              description: "",
+              averagePrice: 0,
+              amount: 0,
+              unitOfMeasurement: "",
+              bestBeforeDate: moment(new Date()).format("YYYY-MM-DD"),
+              neverExpires: false
+            }}
+        />
       </Grid>
     </Grid>
   )
 }
 
 export default InventoryLayout
+
