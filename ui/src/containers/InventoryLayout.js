@@ -171,8 +171,8 @@ const InventoryLayout = (props) => {
         <InventoryFormModal
             title='Create'
             formName='inventoryCreate'
-        products={products}
-        unitsOfMeasurement={MeasurementUnits}
+            products={products}
+            unitsOfMeasurement={MeasurementUnits}
             isDialogOpen={isCreateOpen}
             handleDialog={toggleModals}
             handleInventory={saveInventory}
