@@ -8,7 +8,6 @@ import React from 'react'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
 import { MenuItem, Checkbox, FormControlLabel } from "@material-ui/core"
-import { moment } from "moment"
 
 class InventoryFormModal extends React.Component {
     render() {

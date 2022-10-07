@@ -15,6 +15,7 @@ import { EnhancedTableHead, EnhancedTableToolbar, getComparator, stableSort } fr
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import InventoryFormModal from '../components/Inventories/InventoryFormModal'
+import InventoryDeleteModal from '../components/Inventories/InventoryDeleteModal'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,6 +52,7 @@ const InventoryLayout = (props) => {
   const inventory = useSelector(state => state.inventory.all)
   const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
+  const removeInventories = useCallback(ids => { dispatch(inventoryDuck.removeInventories(ids)) }, [dispatch])
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
 
   useEffect(() => {
@@ -61,11 +63,16 @@ const InventoryLayout = (props) => {
   }, [dispatch, isFetched])
 
   const [isCreateOpen, setCreateOpen] = React.useState(false)
+  const [isDeleteOpen, setDeleteOpen] = React.useState(false)
   const toggleCreate = () => {
     setCreateOpen(true)
   }
+  const toggleDelete = () => {
+    setDeleteOpen(true)
+  }
   const toggleModals = (resetSelected) => {
     setCreateOpen(false)
+    setDeleteOpen(false)
     if (resetSelected) {
       setSelected([])
     }
@@ -118,6 +125,7 @@ const InventoryLayout = (props) => {
             numSelected={selected.length}
             title='Inventory'
             toggleCreate={toggleCreate}
+            toggleDelete={toggleDelete}
         />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
@@ -163,8 +171,8 @@ const InventoryLayout = (props) => {
         <InventoryFormModal
             title='Create'
             formName='inventoryCreate'
-	    products={products}
-	    unitsOfMeasurement={MeasurementUnits}
+            products={products}
+            unitsOfMeasurement={MeasurementUnits}
             isDialogOpen={isCreateOpen}
             handleDialog={toggleModals}
             handleInventory={saveInventory}
@@ -179,6 +187,12 @@ const InventoryLayout = (props) => {
               neverExpires: false
             }}
         />
+	<InventoryDeleteModal
+	  isDialogOpen={isDeleteOpen}
+	  handleDelete={removeInventories}
+	  handleDialog={toggleModals}
+	  initialValues={selected}
+	/>  
       </Grid>
     </Grid>
   )
