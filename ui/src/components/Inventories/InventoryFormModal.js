@@ -19,6 +19,7 @@ class InventoryFormModal extends React.Component {
             initialValues,
 	    products,
 	    unitsOfMeasurement
+	    // selected
         } = this.props
 
         const validate = values => {
@@ -54,6 +55,8 @@ class InventoryFormModal extends React.Component {
                     initialValues={initialValues}
                     onSubmit={values => {
 			values.bestBeforeDate = values.bestBeforeDate + "T00:00:00Z"
+			// if (title == "Edit") {handleInventory(selected, values)}
+			//     else {handleInventory(values)}
 			handleInventory(values)
                         handleDialog(true)
                     }}

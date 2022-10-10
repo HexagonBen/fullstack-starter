@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const normalizeInventory = (inventory) => inventory.map(inv => ({
+const normalizeInventories = (inventories) => inventories.map(inv => ({
   ...inv,
   unitOfMeasurement: MeasurementUnits[inv.unitOfMeasurement].name,
   bestBeforeDate: moment(inv.bestBeforeDate).format('MM/DD/YYYY')
@@ -54,6 +54,7 @@ const InventoryLayout = (props) => {
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const removeInventories = useCallback(ids => { dispatch(inventoryDuck.removeInventories(ids)) }, [dispatch])
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
+  const updateInventory = useCallback((ids, inventory) => {dispatch(inventoryDuck.updateInventory(ids, inventory))}, [dispatch])
 
   useEffect(() => {
     if (!isFetched) {
@@ -63,9 +64,13 @@ const InventoryLayout = (props) => {
   }, [dispatch, isFetched])
 
   const [isCreateOpen, setCreateOpen] = React.useState(false)
+  const [isEditOpen, setEditOpen] = React.useState(false)
   const [isDeleteOpen, setDeleteOpen] = React.useState(false)
   const toggleCreate = () => {
     setCreateOpen(true)
+  }
+  const toggleEdit = () => {
+    setEditOpen(true)
   }
   const toggleDelete = () => {
     setDeleteOpen(true)
@@ -73,12 +78,13 @@ const InventoryLayout = (props) => {
   const toggleModals = (resetSelected) => {
     setCreateOpen(false)
     setDeleteOpen(false)
+    setEditOpen(false)
     if (resetSelected) {
       setSelected([])
     }
   }
 
-  const normalizedInventory = normalizeInventory(inventory)
+  const normalizedInventories = normalizeInventories(inventory)
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('calories')
   const [selected, setSelected] = React.useState([])
@@ -91,7 +97,7 @@ const InventoryLayout = (props) => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = normalizedInventory.map((row) => row.id)
+      const newSelected = normalizedInventories.map((row) => row.id)
       setSelected(newSelected)
       return
     }
@@ -117,6 +123,10 @@ const InventoryLayout = (props) => {
   }
 
   const isSelected = (id) => selected.indexOf(id) !== -1
+  // the first selected inventory will be saved and normalized for editing in case the user hits the edit button
+  const inventoryToEdit = inventory.filter(inventory => inventory.id === selected[0])[0]
+  if (selected.length > 0) {inventoryToEdit.bestBeforeDate = moment(inventoryToEdit.bestBeforeDate).format('YYYY-MM-DD')}
+  console.log(`INVENTORY TO EDIT: ${JSON.stringify(inventoryToEdit)}`)
 
   return (
     <Grid container>
@@ -126,6 +136,7 @@ const InventoryLayout = (props) => {
             title='Inventory'
             toggleCreate={toggleCreate}
             toggleDelete={toggleDelete}
+            toggleEdit={toggleEdit}
         />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
@@ -136,11 +147,11 @@ const InventoryLayout = (props) => {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={normalizedInventory.length}
+              rowCount={normalizedInventories.length}
               headCells={headCells}
             />
             <TableBody>
-              {stableSort(normalizedInventory, getComparator(order, orderBy))
+              {stableSort(normalizedInventories, getComparator(order, orderBy))
                 .map(inv => {
                   const isItemSelected = isSelected(inv.id)
                   return (
@@ -187,6 +198,27 @@ const InventoryLayout = (props) => {
               neverExpires: false
             }}
         />
+	<InventoryFormModal
+	  title='Edit'
+	  formName='inventoryEdit'
+	  isDialogOpen={isEditOpen}
+	  handleDialog={toggleModals}
+	  handleInventory={updateInventory}
+	  unitsOfMeasurement={MeasurementUnits}
+	  products={products}
+	  initialValues={inventoryToEdit}
+	  /*initialValues={{
+            name: inventoryToEdit.name,
+            // productType: inventoryToEdit.productType,
+	    productType: "Malt",  
+            description: inventoryToEdit.description,
+            averagePrice: inventoryToEdit.averagePrice,
+            amount: inventoryToEdit.amount,
+            unitOfMeasurement: inventoryToEdit.unitOfMeasurement,
+            bestBeforeDate: inventoryToEdit.bestBeforeDate,
+            neverExpires: inventoryToEdit.neverExpires
+          }}*/
+	/>
 	<InventoryDeleteModal
 	  isDialogOpen={isDeleteOpen}
 	  handleDelete={removeInventories}
@@ -199,4 +231,5 @@ const InventoryLayout = (props) => {
 }
 
 export default InventoryLayout
+
 
