@@ -68,7 +68,29 @@ public class InventoryDAOTest {
     Assert.assertTrue(inventoryPostInsertion.size() == existingInventory.size() + 1);
     Assert.assertTrue(createdInventory.getId().equals(returnedInventory.getId()));
   }
-  
+
+  /**
+   * Test Update method
+   */
+  @Test
+  public void update() {
+    // Put an inventory in the database so there's something to update
+    Inventory originalInventory = new Inventory();
+    originalInventory.setId("dinosaur");
+    originalInventory.setName(NAME);
+    originalInventory.setProductType(PRODUCT_TYPE);
+    this.mongoTemplate.save(originalInventory);
+    // Create inventory with new variables to update existing inventory in database
+    Inventory newInventory = new Inventory();
+    newInventory.setName("plesiosaurus");
+    newInventory.setProductType("ichthyosaur");
+    newInventory.setDescription("ichthyosaurs were technically not dinosaurs");
+    // Update originalInventory with values from newInventory
+    Optional<Inventory> returnedInventory = this.inventoryDAO.update(originalInventory.getId(), newInventory);
+    // Check that update operation was successful
+    Assert.assertTrue(returnedInventory.isPresent());
+  }
+
   /**
    * Test Delete method with valid id.
    */
