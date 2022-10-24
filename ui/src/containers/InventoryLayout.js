@@ -54,7 +54,7 @@ const InventoryLayout = (props) => {
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const removeInventories = useCallback(ids => { dispatch(inventoryDuck.removeInventories(ids)) }, [dispatch])
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
-  const updateInventory = useCallback((ids, inventory) => {dispatch(inventoryDuck.updateInventory(ids, inventory))}, [dispatch])
+  const updateInventory = useCallback((id, inventory) => {dispatch(inventoryDuck.updateInventory(id, inventory))}, [dispatch])
 
   useEffect(() => {
     if (!isFetched) {

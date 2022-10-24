@@ -54,10 +54,11 @@ class InventoryFormModal extends React.Component {
                 <Formik
                     initialValues={initialValues}
                     onSubmit={values => {
+			console.log(`VALUES AS PASSED FROM INVENTORY FORM MODAL TO INVENTORY LAYOUT: ${JSON.stringify(values)}`)
 			values.bestBeforeDate = values.bestBeforeDate + "T00:00:00Z"
-			// if (title == "Edit") {handleInventory(selected, values)}
-			//     else {handleInventory(values)}
-			handleInventory(values)
+			if (title === "Edit") {handleInventory(initialValues.id, values)}
+			    else {handleInventory(values)}
+			// handleInventory(values)
                         handleDialog(true)
                     }}
                     validate = {validate}

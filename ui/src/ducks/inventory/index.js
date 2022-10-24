@@ -32,9 +32,9 @@ export const saveInventory = createAction(actions.INVENTORIES_SAVE, (inventory) 
         })
 )
 
-export const updateInventory = createAction(actions.INVENTORIES_UPDATE, (inventory) =>
+export const updateInventory = createAction(actions.INVENTORIES_UPDATE, (id, inventory) =>
     (dispatch, getState, config) => axios
-        .put(`${config.restAPIUrl}/inventories`, inventory)
+        .put(`${config.restAPIUrl}/inventories/${id}`, inventory)
         .then((suc) => {
             const invs = []
 	    const id = inventory.id
@@ -43,7 +43,11 @@ export const updateInventory = createAction(actions.INVENTORIES_UPDATE, (invento
                     invs.push(inv)
                 }
             })
-            invs.push(suc.data)
+	    // this line only works if we force the backend to return the new object instead of the old one
+            // invs.push(suc.data)
+	    // so instead we push the object that was passed to axios from the frontend:
+	    console.log(`INVENTORY BEING PUSHED TO FRONTEND MEMORY: ${inventory}`)
+	    invs.push(inventory)
             dispatch(refreshInventories(invs))
             dispatch(openSuccess("Inventory Document Updated"))
         })
