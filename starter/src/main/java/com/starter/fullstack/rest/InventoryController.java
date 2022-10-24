@@ -12,14 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Inventory Controller.
  */
 @RestController
-@RequestMapping("/inventories")
 public class InventoryController {
   private final InventoryDAO inventoryDAO;
 
@@ -36,7 +34,7 @@ public class InventoryController {
    * Find Inventories.
    * @return List of Inventory.
    */
-  @GetMapping
+  @GetMapping("/inventories")
   public List<Inventory> findInventories() {
     return this.inventoryDAO.findAll();
   }
@@ -47,7 +45,7 @@ public class InventoryController {
    * @param inventory inventory.
    * @return Inventory.
    */
-  @PostMapping
+  @PostMapping("/inventories")
   public Inventory createInventory(@Valid @RequestBody Inventory inventory) {
     return this.inventoryDAO.create(inventory);
   }
@@ -68,7 +66,7 @@ public class InventoryController {
    *
    * @param ids ids.
    */
-  @DeleteMapping
+  @DeleteMapping("/inventories")
   public void deleteInventory(@RequestBody List<String> ids) {
     Assert.notEmpty(ids, "Inventory Ids were not provided");
     this.inventoryDAO.delete(ids);

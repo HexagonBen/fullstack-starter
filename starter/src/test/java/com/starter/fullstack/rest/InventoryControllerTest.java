@@ -91,7 +91,7 @@ public class InventoryControllerTest {
   public void update() throws Throwable {
     // Save id of test inventory so we can update it
     String id = this.inventory.getId();
-    // Create new inventory using existing test inventory id to then change some values and update the existing test inventory
+    // Create new inventory using existing test inventory id and change some values
     this.inventory = new Inventory();
     this.inventory.setId(id);
     this.inventory.setName("plesiosaurus");
@@ -103,10 +103,10 @@ public class InventoryControllerTest {
         .content(this.objectMapper.writeValueAsString(this.inventory)))
         .andExpect(status().isOk());
     // Retrieve updated inventory to check if values have been changed as intended
-    Inventory returnedInventory = this.mongoTemplate.findById(id, Inventory.class);
-    Assert.assertEquals("plesiosaurus", returnedInventory.getName());
-    Assert.assertEquals("ichthyosaur", returnedInventory.getProductType());
-    Assert.assertEquals("ichthyosaurs were technically not dinosaurs", returnedInventory.getDescription());
+    Inventory updatedInventory = this.mongoTemplate.findById(id, Inventory.class);
+    Assert.assertEquals("plesiosaurus", updatedInventory.getName());
+    Assert.assertEquals("ichthyosaur", updatedInventory.getProductType());
+    Assert.assertEquals("ichthyosaurs were technically not dinosaurs", updatedInventory.getDescription());
   }
 
   /**

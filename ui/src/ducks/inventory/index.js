@@ -43,11 +43,8 @@ export const updateInventory = createAction(actions.INVENTORIES_UPDATE, (id, inv
                     invs.push(inv)
                 }
             })
-	    // this line only works if we force the backend to return the new object instead of the old one
-            // invs.push(suc.data)
-	    // so instead we push the object that was passed to axios from the frontend:
-	    console.log(`INVENTORY BEING PUSHED TO FRONTEND MEMORY: ${inventory}`)
-	    invs.push(inventory)
+	    console.log(`INVENTORY BEING PUSHED TO FRONTEND MEMORY: ${JSON.stringify(suc.data)}`)
+	    invs.push(suc.data)
             dispatch(refreshInventories(invs))
             dispatch(openSuccess("Inventory Document Updated"))
         })
