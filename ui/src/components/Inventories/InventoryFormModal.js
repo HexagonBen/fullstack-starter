@@ -58,7 +58,6 @@ class InventoryFormModal extends React.Component {
 			values.bestBeforeDate = values.bestBeforeDate + "T00:00:00Z"
 			if (title === "Edit") {handleInventory(initialValues.id, values)}
 			    else {handleInventory(values)}
-			// handleInventory(values)
                         handleDialog(true)
                     }}
                     validate = {validate}

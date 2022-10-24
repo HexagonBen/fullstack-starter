@@ -54,7 +54,11 @@ const InventoryLayout = (props) => {
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const removeInventories = useCallback(ids => { dispatch(inventoryDuck.removeInventories(ids)) }, [dispatch])
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
-  const updateInventory = useCallback((id, inventory) => {dispatch(inventoryDuck.updateInventory(id, inventory))}, [dispatch])
+  const updateInventory = useCallback((id, inventory) => {
+	  console.log(`ID AS SENT FROM INV LAYOUT TO AXIOS: ${id}`)
+	  console.log(`BODY AS SENT FROM LAYOUT TO AXIOS: ${JSON.stringify(inventory)}`)
+	  dispatch(inventoryDuck.updateInventory(id, inventory))
+  }, [dispatch])
 
   useEffect(() => {
     if (!isFetched) {
