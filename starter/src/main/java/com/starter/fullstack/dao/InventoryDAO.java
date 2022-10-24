@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
@@ -87,12 +88,9 @@ public class InventoryDAO {
     update.set("unitOfMeasurement", inventory.getUnitOfMeasurement());
     update.set("bestBeforeDate", inventory.getBestBeforeDate());
     update.set("neverExpires", inventory.isNeverExpires());
-    Inventory oldInventory = this.mongoTemplate.findAndModify(query, update, Inventory.class);
-    if (oldInventory != null) {
-      return Optional.ofNullable(inventory);
-    } else {
-      return Optional.empty();
-    }
+    FindAndModifyOptions options = FindAndModifyOptions.options().returnNew(true);
+    Inventory updatedInventory = this.mongoTemplate.findAndModify(query, update, options, Inventory.class);
+    return Optional.ofNullable(updatedInventory);
   }
 
   /**

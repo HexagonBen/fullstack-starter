@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -80,6 +81,32 @@ public class InventoryControllerTest {
         .andExpect(status().isOk());
 
     Assert.assertEquals(2, this.mongoTemplate.findAll(Inventory.class).size());
+  }
+
+  /**
+   * Test update endpoint
+   * @throws Throwable see MockMvc
+   */
+  @Test
+  public void update() throws Throwable {
+    // Save id of test inventory so we can update it
+    String id = this.inventory.getId();
+    // Create new inventory using existing test inventory id to then change some values and update the existing test inventory
+    this.inventory = new Inventory();
+    this.inventory.setId(id);
+    this.inventory.setName("plesiosaurus");
+    this.inventory.setProductType("ichthyosaur");
+    this.inventory.setDescription("ichthyosaurs were technically not dinosaurs");
+    this.mockMvc.perform(put("/inventories/" + id)
+        .accept(MediaType.APPLICATION_JSON)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(this.objectMapper.writeValueAsString(this.inventory)))
+        .andExpect(status().isOk());
+    // Retrieve updated inventory to check if values have been changed as intended
+    Inventory returnedInventory = this.mongoTemplate.findById(id, Inventory.class);
+    Assert.assertEquals("plesiosaurus", returnedInventory.getName());
+    Assert.assertEquals("ichthyosaur", returnedInventory.getProductType());
+    Assert.assertEquals("ichthyosaurs were technically not dinosaurs", returnedInventory.getDescription());
   }
 
   /**

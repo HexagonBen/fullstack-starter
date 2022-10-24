@@ -76,10 +76,9 @@ public class InventoryDAOTest {
   public void update() {
     // Put an inventory in the database so there's something to update
     Inventory originalInventory = new Inventory();
-    originalInventory.setId("dinosaur");
     originalInventory.setName(NAME);
     originalInventory.setProductType(PRODUCT_TYPE);
-    this.mongoTemplate.save(originalInventory);
+    originalInventory = this.mongoTemplate.save(originalInventory);
     // Create inventory with new variables to update existing inventory in database
     Inventory newInventory = new Inventory();
     newInventory.setName("plesiosaurus");
@@ -88,7 +87,9 @@ public class InventoryDAOTest {
     // Update originalInventory with values from newInventory
     Optional<Inventory> returnedInventory = this.inventoryDAO.update(originalInventory.getId(), newInventory);
     // Check that update operation was successful
-    Assert.assertTrue(returnedInventory.isPresent());
+    Assert.assertTrue(returnedInventory.get().getName().equals("plesiosaurus"));
+    Assert.assertTrue(returnedInventory.get().getProductType().equals("ichthyosaur"));
+    Assert.assertTrue(returnedInventory.get().getDescription().equals("ichthyosaurs were technically not dinosaurs"));
   }
 
   /**
