@@ -130,7 +130,6 @@ const InventoryLayout = (props) => {
   // the first selected inventory will be saved and normalized for editing in case the user hits the edit button
   const inventoryToEdit = inventory.filter(inventory => inventory.id === selected[0])[0]
   if (selected.length > 0) {inventoryToEdit.bestBeforeDate = moment(inventoryToEdit.bestBeforeDate).format('YYYY-MM-DD')}
-  console.log(`INVENTORY TO EDIT: ${JSON.stringify(inventoryToEdit)}`)
 
   return (
     <Grid container>
@@ -211,17 +210,6 @@ const InventoryLayout = (props) => {
 	  unitsOfMeasurement={MeasurementUnits}
 	  products={products}
 	  initialValues={inventoryToEdit}
-	  /*initialValues={{
-            name: inventoryToEdit.name,
-            // productType: inventoryToEdit.productType,
-	    productType: "Malt",  
-            description: inventoryToEdit.description,
-            averagePrice: inventoryToEdit.averagePrice,
-            amount: inventoryToEdit.amount,
-            unitOfMeasurement: inventoryToEdit.unitOfMeasurement,
-            bestBeforeDate: inventoryToEdit.bestBeforeDate,
-            neverExpires: inventoryToEdit.neverExpires
-          }}*/
 	/>
 	<InventoryDeleteModal
 	  isDialogOpen={isDeleteOpen}

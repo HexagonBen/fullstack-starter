@@ -43,7 +43,6 @@ export const updateInventory = createAction(actions.INVENTORIES_UPDATE, (invento
                     invs.push(inv)
                 }
             })
-	    console.log(`INVENTORY BEING PUSHED TO FRONTEND MEMORY: ${JSON.stringify(suc.data)}`)
 	    invs.push(suc.data)
             dispatch(refreshInventories(invs))
             dispatch(openSuccess("Inventory Document Updated"))
