@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,12 +52,11 @@ public class InventoryController {
   /**
    * Update Inventory By Id.
    * @param inventory inventory.
-   * @param id id.
    * @return Inventory.
    */
-  @PutMapping("/inventories/{id}")
-  public Optional<Inventory> updateInventory(@PathVariable("id") String id, @Valid @RequestBody Inventory inventory) {
-    return this.inventoryDAO.update(id, inventory);
+  @PutMapping("/inventories")
+  public Optional<Inventory> updateInventory(@Valid @RequestBody Inventory inventory) {
+    return this.inventoryDAO.update(inventory.getId(), inventory);
   }
 
   /**

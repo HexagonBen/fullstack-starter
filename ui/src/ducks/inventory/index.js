@@ -32,9 +32,9 @@ export const saveInventory = createAction(actions.INVENTORIES_SAVE, (inventory) 
         })
 )
 
-export const updateInventory = createAction(actions.INVENTORIES_UPDATE, (id, inventory) =>
+export const updateInventory = createAction(actions.INVENTORIES_UPDATE, (inventory) =>
     (dispatch, getState, config) => axios
-        .put(`${config.restAPIUrl}/inventories/${id}`, inventory)
+        .put(`${config.restAPIUrl}/inventories`, inventory)
         .then((suc) => {
             const invs = []
 	    const id = inventory.id

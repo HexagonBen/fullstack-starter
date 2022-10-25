@@ -97,7 +97,7 @@ public class InventoryControllerTest {
     this.inventory.setName("plesiosaurus");
     this.inventory.setProductType("ichthyosaur");
     this.inventory.setDescription("ichthyosaurs were technically not dinosaurs");
-    this.mockMvc.perform(put("/inventories/" + id)
+    this.mockMvc.perform(put("/inventories")
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(this.objectMapper.writeValueAsString(this.inventory)))
